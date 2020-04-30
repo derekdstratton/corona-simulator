@@ -7,6 +7,9 @@
 
 #include <map>
 #include <utility>
+#include <cmath>
+extern float RADIUS_OF_INFECTION_SQUARED;
+extern float PROBABILITY_OF_INFECTION;
 
 using namespace std;
 
@@ -34,13 +37,23 @@ class particle {
         {
             case Susceptible:
             {
-                for (auto nearby : particlesInArea)
+                for (const auto& nearby : particlesInArea)
                 {
-                    //transmit
+                    //transmitting the disease
+                    if (nearby.state == Infected &&
+                    dist_squared(nearby) <= RADIUS_OF_INFECTION_SQUARED &&
+                    rand() % 100 < PROBABILITY_OF_INFECTION) {
+                        state = Infected;
+                        break;
+                    }
                 }
+                break;
             }
             case Infected:
+            {
+                //todo: probability of transitioning to recovered or deceased
                 break;
+            }
             case Recovered:
                 break;
             case Deceased:
@@ -48,6 +61,12 @@ class particle {
         }
 
         //todo: finally, check to see if jumping
+    }
+
+    float dist_squared(particle other) {
+        float dx = other.x - x;
+        float dy = other.y - y;
+        return dx * dx + dy * dy;
     }
 };
 
