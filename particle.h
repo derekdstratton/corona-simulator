@@ -27,6 +27,12 @@ class particle {
     map<pair<int, int>, float> jumpLocationsAndChance;
     bool jumping;
     pair<int, int> jumpLocation;
+
+    particle()
+    {
+        state = Susceptible;
+
+    }
     //processes the particle at each time step
     void process(const vector<particle>& particlesInArea)
     {
