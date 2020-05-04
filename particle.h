@@ -24,9 +24,9 @@ class particle {
     public:
     states state;
     float x, y;
-    map<pair<int, int>, float> jumpLocationsAndChance;
+    map<tuple<int, int, AreaTypes>, float> jumpLocationsAndChance;
     bool jumping;
-    pair<int, int> jumpLocation;
+    tuple<int, int, AreaTypes> jumpLocation;
 
     particle()
     {

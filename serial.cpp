@@ -56,7 +56,7 @@ int main(int argc, char ** argv) {
         {
             int random_person = rand() % NUMBER_OF_PARTICLES;
             particles_temp[random_person].jumpLocationsAndChance.insert(
-                    make_pair(make_pair(j, i), PROBABILITY_OF_JUMPING));
+                    make_pair(make_tuple(j, i, Public), PROBABILITY_OF_JUMPING));
         }
         public_areas[j].push_back(a);
         j++;
@@ -74,17 +74,55 @@ int main(int argc, char ** argv) {
         {
             //2 particles per personal area
             particles_temp[k].jumpLocationsAndChance.insert(
-                    make_pair(make_pair(i, j), PROBABILITY_OF_JUMPING));
+                    make_pair(make_tuple(i, j, Personal), PROBABILITY_OF_JUMPING));
             personal_areas[i][j].particles.push_back(particles_temp[k++]);
             particles_temp[k].jumpLocationsAndChance.insert(
-                    make_pair(make_pair(i, j), PROBABILITY_OF_JUMPING));
+                    make_pair(make_tuple(i, j, Personal), PROBABILITY_OF_JUMPING));
             personal_areas[i][j].particles.push_back(particles_temp[k++]);
         }
     }
 
     //main loop
-    int t = 0;
+    map<tuple<int, int, AreaTypes>, particle> outgoingParticles;
+    for (int t = 0; t < 1000; t++)
+    {
+        //process personal areas
+        for (int i = 0; i < NUM_BOXES; i++)
+        {
+            for (int j = 0; j < personal_areas[i].size(); j++)
+            {
+                personal_areas[i][j].processArea();
+                outgoingParticles.insert(personal_areas[i][j].outgoingParticles.begin(),
+                        personal_areas[i][j].outgoingParticles.end());
+            }
+        }
 
+        //process public areas
+        for (int i = 0; i < NUM_BOXES; i++)
+        {
+            for (int j = 0; j < public_areas[i].size(); j++)
+            {
+                public_areas[i][j].processArea();
+                outgoingParticles.insert(public_areas[i][j].outgoingParticles.begin(),
+                                         public_areas[i][j].outgoingParticles.end());
+            }
+        }
+
+        for (auto part : outgoingParticles)
+        {
+            if (get<2>(part.first) == Public)
+            {
+                public_areas[get<0>(part.first)][get<1>(part.first)].particles.push_back(part.second);
+            }
+            else
+            {
+                personal_areas[get<0>(part.first)][get<1>(part.first)].particles.push_back(part.second);
+            }
+        }
+
+        //todo: outgoing particles need to be sent around
+        outgoingParticles.clear();
+    }
 
     return 0;
 }
