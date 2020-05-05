@@ -28,15 +28,41 @@ class particle {
     bool jumping;
     tuple<int, int, AreaTypes> jumpLocation;
 
+    particle(const particle& p)
+    {
+        state = p.state;
+        x = p.x;
+        y = p.y;
+        jumpLocationsAndChance = p.jumpLocationsAndChance;
+        jumping = p.jumping;
+        jumpLocation = p.jumpLocation;
+    }
+
     particle()
     {
         state = Susceptible;
+        x = rand() % 100;
+        y = rand() % 100;
 
     }
     //processes the particle at each time step
     void process(const vector<particle>& particlesInArea)
     {
         //todo: first move position.
+        x += (rand() % 6) - 3.0;
+        if (x < 0) {
+            x = 0;
+        } else if (x >= 100) {
+            x = 100;
+        }
+        y += (rand() % 6) - 3.0;
+        if (y < 0) {
+            y = 0;
+        } else if (y >= 100) {
+            y = 100;
+        }
+
+        jumping = false;
 
         //now, transmit the disease
         switch (state)
@@ -67,6 +93,15 @@ class particle {
         }
 
         //todo: finally, check to see if jumping
+        for (auto item : jumpLocationsAndChance)
+        {
+            if (item.second >= rand() % 100)
+            {
+                jumping = true;
+                jumpLocation = item.first;
+                break;
+            }
+        }
     }
 
     float dist_squared(particle other) {
