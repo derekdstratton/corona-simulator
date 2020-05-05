@@ -11,24 +11,36 @@
 
 using namespace std;
 
+//NOTE: SINCE THE SIM STARTS WITH 1 INFECTED INDIVIDUAL, THEY MIGHT DIE OR RECOVER BEFORE THEY INFECT
+//ANYONE ELSE. THEY NEED TO EITHER HEAL SLOWER OR SPREAD IT FASTER!
+
 //GLOBAL PARAMETERS
-float RADIUS_OF_INFECTION_SQUARED; //
+float RADIUS_OF_INFECTION_SQUARED; //How close particles are to be infected. Square space is x, y {0:100}
+//so theoretically values should go from 0 to 100^2
 float PROBABILITY_OF_INFECTION; // Should be a float between 0 and 100
-int NUMBER_OF_PARTICLES; //should be divisible by 8
+int NUMBER_OF_PARTICLES; //should it be divisible by 8? idk
 int NUM_BOXES; //number of boxes to run things on.
 float PROBABILITY_OF_JUMPING; // Should be a float between 0 and 100
+float PROBABILITY_OF_CURE; //Should be a float between 0 and 100000
+float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
+
+
+int t; //time variable is global so it can be an extern
 
 int main(int argc, char ** argv) {
     srand(time(nullptr));
 
-    //initialize stuff
+    //initialize stuff, parameters are ALL_CAPS
     NUMBER_OF_PARTICLES = 1000;
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
     NUM_BOXES = 10;
     PROBABILITY_OF_JUMPING = 20;
-    PROBABILITY_OF_INFECTION = 20;
-    RADIUS_OF_INFECTION_SQUARED = 25;
+    PROBABILITY_OF_INFECTION = 80;
+    RADIUS_OF_INFECTION_SQUARED = 100;
+    PROBABILITY_OF_CURE = 2;
+    PROBABILITY_OF_DEATH = 1;
+    int NUM_LOCATIONS_PEOPLE_VISIT = 10;
 
     //create initial particles before assigning them to their areas
     vector<particle> particles_temp;
@@ -57,7 +69,7 @@ int main(int argc, char ** argv) {
         area a;
         public_areas[j].push_back(a);
         // Give k (10) particles the ability to go to this public area.
-        for (int k = 0; k < 10; k++)
+        for (int k = 0; k < NUM_LOCATIONS_PEOPLE_VISIT; k++)
         {
             int random_person = rand() % NUMBER_OF_PARTICLES;
             particles_temp[random_person].jumpLocationsAndChance.insert(
@@ -88,9 +100,17 @@ int main(int argc, char ** argv) {
 
     //main loop
     map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
-    for (int t = 0; t < 1000; t++)
+    for (t = 0; t < 1000; t++)
     {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
+
+        //this will implement a lockdown mode
+        if (t == 10)
+        {
+            PROBABILITY_OF_JUMPING = 1;
+            //todo: people should also be sent back to their personal areas. ugh im lazy tho
+        }
+
         //process personal areas
         for (int i = 0; i < NUM_BOXES; i++)
         {
@@ -99,6 +119,8 @@ int main(int argc, char ** argv) {
                 personal_areas[i][j].processArea();
                 totalSus += personal_areas[i][j].numSus;
                 totalInf += personal_areas[i][j].numInf;
+                totalRec += personal_areas[i][j].numRec;
+                totalDec += personal_areas[i][j].numDec;
                 outgoingParticles.insert(personal_areas[i][j].outgoingParticles.begin(),
                         personal_areas[i][j].outgoingParticles.end());
             }
@@ -112,6 +134,8 @@ int main(int argc, char ** argv) {
                 public_areas[i][j].processArea();
                 totalSus += public_areas[i][j].numSus;
                 totalInf += public_areas[i][j].numInf;
+                totalRec += public_areas[i][j].numRec;
+                totalDec += public_areas[i][j].numDec;
                 outgoingParticles.insert(public_areas[i][j].outgoingParticles.begin(),
                                          public_areas[i][j].outgoingParticles.end());
             }
@@ -133,7 +157,8 @@ int main(int argc, char ** argv) {
         outgoingParticles.clear();
 
         //Debugging or data
-        cout << "Time " << t << ": Suscpetible- " << totalSus << ", Infected- " << totalInf << endl;
+        cout << "Time " << t << ": Suscpetible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
+        totalRec << ", Deceased- " << totalDec << endl;
     }
 
     return 0;

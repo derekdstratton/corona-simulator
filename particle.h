@@ -10,6 +10,10 @@
 #include <cmath>
 extern float RADIUS_OF_INFECTION_SQUARED;
 extern float PROBABILITY_OF_INFECTION;
+extern float PROBABILITY_OF_CURE;
+extern float PROBABILITY_OF_DEATH;
+extern float PROBABILITY_OF_JUMPING;
+extern int t;
 
 using namespace std;
 
@@ -20,7 +24,7 @@ enum states {
     Deceased
 };
 
-int var = 0;
+long var = 0;
 
 class particle {
     public:
@@ -28,9 +32,11 @@ class particle {
     states state;
     float x, y;
     map<tuple<int, int, AreaTypes>, float> jumpLocationsAndChance;
+    //ignore the 2nd parameter in this. i decided to just make JUMP CHANCE an extern global
     bool jumping;
     tuple<int, int, AreaTypes> jumpLocation;
     int id;
+    int toi; //time of infection
 
     particle()
     {
@@ -49,7 +55,7 @@ class particle {
     //processes the particle at each time step
     void process(const vector<particle>& particlesInArea)
     {
-        //todo: first move position.
+        //first move position.
         x += (rand() % 6) - 3.0;
         if (x < 0) {
             x = 0;
@@ -77,6 +83,7 @@ class particle {
                     dist_squared(nearby) <= RADIUS_OF_INFECTION_SQUARED &&
                     rand() % 100 < PROBABILITY_OF_INFECTION) {
                         state = Infected;
+                        toi = t;
                         break;
                     }
                 }
@@ -84,19 +91,28 @@ class particle {
             }
             case Infected:
             {
-                //todo: probability of transitioning to recovered or deceased
+                //probability of transitioning to recovered or deceased
+                if (rand() % 10000 < PROBABILITY_OF_CURE + (t - toi)) {
+                    state = Recovered;
+                } else if (rand() % 10000 < PROBABILITY_OF_DEATH + (t - toi)) {
+                    state = Deceased;
+                }
                 break;
             }
             case Recovered:
+            {
                 break;
+            }
             case Deceased:
+            {
                 break;
+            }
         }
 
-        //todo: finally, check to see if jumping
+        //finally, check to see if jumping
         for (auto item : jumpLocationsAndChance)
         {
-            if (item.second >= rand() % 100)
+            if (PROBABILITY_OF_JUMPING >= rand() % 100)
             {
                 jumping = true;
                 jumpLocation = item.first;
