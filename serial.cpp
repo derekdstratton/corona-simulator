@@ -51,21 +51,21 @@ int main(int argc, char ** argv) {
 
     //create public areas
     vector<area> public_areas[NUM_BOXES];
-//    j = 0;
-//    for (int i = 0; i < public_area_cnt; i++)
-//    {
-//        area a;
-//        public_areas[j].push_back(a);
-//        // Give k (10) particles the ability to go to this public area.
-//        for (int k = 0; k < 10; k++)
-//        {
-//            int random_person = rand() % NUMBER_OF_PARTICLES;
-////            particles_temp[random_person].jumpLocationsAndChance.insert(
-////                    make_pair(make_tuple(j, public_areas[j].size()-1, Public), PROBABILITY_OF_JUMPING));
-//        }
-//        j++;
-//        j %= NUM_BOXES;
-//    }
+    j = 0;
+    for (int i = 0; i < public_area_cnt; i++)
+    {
+        area a;
+        public_areas[j].push_back(a);
+        // Give k (10) particles the ability to go to this public area.
+        for (int k = 0; k < 10; k++)
+        {
+            int random_person = rand() % NUMBER_OF_PARTICLES;
+            particles_temp[random_person].jumpLocationsAndChance.insert(
+                    make_pair(make_tuple(j, public_areas[j].size()-1, Public), PROBABILITY_OF_JUMPING));
+        }
+        j++;
+        j %= NUM_BOXES;
+    }
 
     //someone has to start infected!
     particles_temp[rand() % NUMBER_OF_PARTICLES].state = Infected;
@@ -87,7 +87,7 @@ int main(int argc, char ** argv) {
     }
 
     //main loop
-    map<tuple<int, int, AreaTypes>, particle> outgoingParticles;
+    map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
     for (int t = 0; t < 1000; t++)
     {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
@@ -117,21 +117,16 @@ int main(int argc, char ** argv) {
             }
         }
 
-        int lol1 = outgoingParticles.size();
-        int lol2 = 0;
-
         //send outgoing particles where they need to go
         for (const auto& part : outgoingParticles)
         {
-            if (get<2>(part.first) == Public)
+            if (get<2>(part.second) == Public)
             {
-                public_areas[get<0>(part.first)][get<1>(part.first)].particles.push_back(part.second);
+                public_areas[get<0>(part.second)][get<1>(part.second)].particles.push_back(part.first);
             }
             else
             {
-                lol2++;
-                personal_areas[get<0>(part.first)][get<1>(part.first)].particles.push_back(part.second);
-//                cout << get<0>(part.first) << " " << get<1>(part.first) << endl;
+                personal_areas[get<0>(part.second)][get<1>(part.second)].particles.push_back(part.first);
             }
         }
 

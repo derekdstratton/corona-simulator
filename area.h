@@ -17,7 +17,7 @@ class area {
     vector<particle> particles;
     AreaTypes type;
     //particles that are jumping are temporarily stored here.
-    map<tuple<int, int, AreaTypes>, particle> outgoingParticles;
+    map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
     int numSus, numInf, numRec, numDec;
 
     //called at each time step
@@ -51,7 +51,7 @@ class area {
                 }
             }
             if (it->jumping) {
-                outgoingParticles.insert(pair<tuple<int, int, AreaTypes>, particle>(it->jumpLocation, *it));
+                outgoingParticles.insert(pair<particle, tuple<int, int, AreaTypes>>(*it, it->jumpLocation));
                 particles.erase(it);
                 it--;
             }

@@ -20,31 +20,32 @@ enum states {
     Deceased
 };
 
+int var = 0;
+
 class particle {
     public:
+    static int cnt;
     states state;
     float x, y;
     map<tuple<int, int, AreaTypes>, float> jumpLocationsAndChance;
     bool jumping;
     tuple<int, int, AreaTypes> jumpLocation;
-
-    particle(const particle& p)
-    {
-        state = p.state;
-        x = p.x;
-        y = p.y;
-        jumpLocationsAndChance = p.jumpLocationsAndChance;
-        jumping = p.jumping;
-        jumpLocation = p.jumpLocation;
-    }
+    int id;
 
     particle()
     {
         state = Susceptible;
         x = rand() % 100;
         y = rand() % 100;
+        id = var++;
 
     }
+
+    bool operator <( const particle &rhs ) const
+    {
+        return ( id < rhs.id );
+    }
+
     //processes the particle at each time step
     void process(const vector<particle>& particlesInArea)
     {
