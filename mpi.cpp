@@ -167,7 +167,7 @@ int main(int argc, char ** argv) {
                     stru.d = part.first.id;
                     stru.e = get<0>(part.second);
                     stru.f = get<1>(part.second);
-                    stru.g = get<2>(part.second) == Personal ? 1 : 2));
+                    stru.g = get<2>(part.second) == Personal ? 1 : 2;
                     mpiSignal.push_back(stru);
                 }
             }
@@ -196,7 +196,7 @@ int main(int argc, char ** argv) {
                     stru.d = part.first.id;
                     stru.e = get<0>(part.second);
                     stru.f = get<1>(part.second);
-                    stru.g = get<2>(part.second) == Personal ? 1 : 2));
+                    stru.g = get<2>(part.second) == Personal ? 1 : 2;
                     mpiSignal.push_back(stru);
                 }
             }
