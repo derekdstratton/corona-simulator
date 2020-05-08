@@ -199,6 +199,7 @@ int main(int argc, char ** argv) {
                 int size;
                 MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
                 vector<tuple<int, int, int, int, int, int, int>> incomingSignal;
+                incomingSignal.resize(size);
                 MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
                 //todo: move this outside for loop for efficiency?
                 for (auto sig : incomingSignal)
