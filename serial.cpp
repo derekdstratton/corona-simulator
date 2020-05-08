@@ -32,6 +32,12 @@ float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
 int t; //time variable is global so it can be an extern
 
 int main(int argc, char ** argv) {
+	std::ofstream fout("serialData.csv");
+	if(fout.fail())
+	{
+		std::cerr << "Could not open data file! Please close serialData.csv and try again" << std::endl;
+		return -1;
+	}
 	std::cout << "Starting simulation" << std::endl;
 	Timer timer(true);
     srand(time(nullptr));
@@ -178,26 +184,15 @@ int main(int argc, char ** argv) {
 			std::chrono::seconds dura( 2);
 			std::this_thread::sleep_for( dura );
 			main(argc, argv);
-			return -1;
+			return -2;
 		}
     }
     std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
-
-
-    std::ofstream fout("serialData.csv");
-    if(fout.fail())
+	fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
+	for(auto point: data)
 	{
-    	std::cerr << "Could not open data file!" << std::endl;
-    	return -2;
-	}
-    else
-	{
-		fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
-		for(auto point: data)
-		{
 //			cout << "Time " << get<0>(point) << ": Susceptible- " << get<1>(point) << ", Infected- " << get<2>(point) << ", Recovered- " << get<3>(point) << ", Deceased- " << get<4>(point) << endl;
-			fout << get<0>(point) << ", " << get<1>(point) << ", " << get<2>(point) << ", " << get<3>(point) << ", " << get<4>(point) << std::endl;
-		}
+		fout << get<0>(point) << ", " << get<1>(point) << ", " << get<2>(point) << ", " << get<3>(point) << ", " << get<4>(point) << std::endl;
 	}
 	fout.close();
 

@@ -12,7 +12,7 @@ class Timer
 {
 	public:
 		Timer();
-		explicit Timer(bool StartNow);
+		explicit Timer(bool startNow);
 
 		void startTimer();
 		double getElapsedTime();
