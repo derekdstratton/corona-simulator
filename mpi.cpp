@@ -122,7 +122,11 @@ int main(int argc, char ** argv) {
     MPI_Type_contiguous(6, MPI_INT, &MPI_SIGNAL);
     MPI_Type_commit(&MPI_SIGNAL);
 
-    vector<tuple<int, int, int, int, int, int, int>> mpiSignal;
+    struct signal {
+        int a, b, c, d, e, f, g;
+    };
+
+    vector<signal> mpiSignal;
 
     //main loop
     map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
@@ -156,7 +160,15 @@ int main(int argc, char ** argv) {
 
                     auto tup = make_tuple(i, j, 1, get<0>(part.second), part.first.id, get<1>(part.second),
                             get<2>(part.second) == Personal ? 1 : 2);
-                    mpiSignal.push_back(tup);
+                    signal stru;
+                    stru.a = i;
+                    stru.b = j;
+                    stru.c = 2;
+                    stru.d = part.first.id;
+                    stru.e = get<0>(part.second);
+                    stru.f = get<1>(part.second);
+                    stru.g = get<2>(part.second) == Personal ? 1 : 2);
+                    mpiSignal.push_back(stru);
                 }
             }
 //        }
@@ -177,7 +189,15 @@ int main(int argc, char ** argv) {
                 {
                     auto tup = make_tuple(i, j, 2, part.first.id, get<0>(part.second), get<1>(part.second),
                                           get<2>(part.second) == Personal ? 1 : 2);
-                    mpiSignal.push_back(tup);
+                    signal stru;
+                    stru.a = i;
+                    stru.b = j;
+                    stru.c = 2;
+                    stru.d = part.first.id;
+                    stru.e = get<0>(part.second);
+                    stru.f = get<1>(part.second);
+                    stru.g = get<2>(part.second) == Personal ? 1 : 2);
+                    mpiSignal.push_back(stru);
                 }
             }
 //        }
@@ -198,12 +218,14 @@ int main(int argc, char ** argv) {
             {
                 int size;
                 MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
-                vector<tuple<int, int, int, int, int, int, int>> incomingSignal;
+                vector<signal> incomingSignal;
                 incomingSignal.resize(size);
                 MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
                 //todo: move this outside for loop for efficiency?
-                for (auto sig : incomingSignal)
+                for (auto stru : incomingSignal)
                 {
+                    tuple<int, int, int, int, int, int, int> sig = make_tuple(stru.a, stru.b, stru.c,
+                    stru.d, stru.e, stru.f, stru.g);
                     if (get<2>(sig) == 2) { //public
                         auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
