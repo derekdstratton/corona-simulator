@@ -5,7 +5,6 @@
 #ifndef CORONA_AREA_H
 #define CORONA_AREA_H
 
-#include <vector>
 #include "particle.h"
 
 using namespace std;

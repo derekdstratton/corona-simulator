@@ -8,6 +8,8 @@
 #include <map>
 #include <utility>
 #include <cmath>
+#include <vector>
+
 extern float RADIUS_OF_INFECTION_SQUARED;
 extern float PROBABILITY_OF_INFECTION;
 extern float PROBABILITY_OF_CURE;
