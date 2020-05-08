@@ -210,7 +210,17 @@ int main(int argc, char ** argv) {
                             if (part.id == get<3>(sig))
                             {
                                 outgoingParticles.insert(make_pair(part,
-                                        make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)))
+                                        make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
+                            }
+                        }
+                    } else {
+                        auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
+                        for (const auto& part : parts)
+                        {
+                            if (part.id == get<3>(sig))
+                            {
+                                outgoingParticles.insert(make_pair(part,
+                                                                   make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
                             }
                         }
                     }
