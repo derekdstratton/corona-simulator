@@ -6,8 +6,12 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <chrono>
+#include <thread>
 
 #include "area.h"
+#include "Timer.h"
 
 using namespace std;
 
@@ -28,10 +32,13 @@ float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
 int t; //time variable is global so it can be an extern
 
 int main(int argc, char ** argv) {
+	std::cout << "Starting simulation" << std::endl;
+	Timer timer(true);
     srand(time(nullptr));
 
     //initialize stuff, parameters are ALL_CAPS
     NUMBER_OF_PARTICLES = 1000;
+    bool othersHaveBeenInfected = false;
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
     NUM_BOXES = 10;
@@ -100,6 +107,7 @@ int main(int argc, char ** argv) {
 
     //main loop
     map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
+    vector<tuple<int, int, int, int, int>> data;
     for (t = 0; t < 1000; t++)
     {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
@@ -153,13 +161,45 @@ int main(int argc, char ** argv) {
                 personal_areas[get<0>(part.second)][get<1>(part.second)].particles.push_back(part.first);
             }
         }
-
         outgoingParticles.clear();
 
-        //Debugging or data
-        cout << "Time " << t << ": Suscpetible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
+        data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
+
+        //Debugging
+        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
         totalRec << ", Deceased- " << totalDec << endl;
+
+        //End the simulation because no one was infected
+		if(totalInf > 1 and ! othersHaveBeenInfected)
+			othersHaveBeenInfected = true;
+		else if(totalInf == 0 and !othersHaveBeenInfected)
+		{
+			cout << "A pandemic did not occur! No one else was infected. Ending simulation..." << std::endl;
+			std::chrono::seconds dura( 2);
+			std::this_thread::sleep_for( dura );
+			main(argc, argv);
+			return -1;
+		}
     }
+    std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
+
+
+    std::ofstream fout("serialData.csv");
+    if(fout.fail())
+	{
+    	std::cerr << "Could not open data file!" << std::endl;
+    	return -2;
+	}
+    else
+	{
+		fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
+		for(auto point: data)
+		{
+//			cout << "Time " << get<0>(point) << ": Susceptible- " << get<1>(point) << ", Infected- " << get<2>(point) << ", Recovered- " << get<3>(point) << ", Deceased- " << get<4>(point) << endl;
+			fout << get<0>(point) << ", " << get<1>(point) << ", " << get<2>(point) << ", " << get<3>(point) << ", " << get<4>(point) << std::endl;
+		}
+	}
+	fout.close();
 
     return 0;
 }

@@ -27,9 +27,9 @@ add_compile_options("${COMMON_FLAGS}")
 # Set shared libraries to be compiled only once.
 #   STATIC -> .a
 #   SHARED -> .so
-add_library(area STATIC area.cpp area.h particle.h)
+add_library(area STATIC area.cpp area.h particle.h Timer.cpp Timer.h)
 
-add_executable(serial serial.cpp area.h particle.h)
+add_executable(serial serial.cpp area.h particle.h Timer.cpp Timer.h)
 
 find_package(MPI REQUIRED)
 
