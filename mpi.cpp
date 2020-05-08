@@ -210,7 +210,9 @@ int main(int argc, char ** argv) {
                 for (int r2 = 0; r2 < NUM_BOXES; r2++) {
                     int size = mpiSignal.size();
                     MPI_Send(&size, 1, MPI_INT, r2, 1, MPI_COMM_WORLD);
-                    MPI_Send(&mpiSignal[0], size, MPI_SIGNAL, r2, 1, MPI_COMM_WORLD);
+                    if (size > 0) {
+                        MPI_Send(&mpiSignal[0], size, MPI_SIGNAL, r2, 1, MPI_COMM_WORLD);
+                    }
                 }
 
             }
@@ -220,7 +222,9 @@ int main(int argc, char ** argv) {
                 MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
                 vector<signal> incomingSignal;
                 incomingSignal.resize(size);
-                MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
+                if (size > 0) {
+                    MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
+                }
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
                 {
