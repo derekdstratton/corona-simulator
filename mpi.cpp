@@ -119,7 +119,7 @@ int main(int argc, char ** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
 
     MPI_Datatype MPI_SIGNAL;
-    MPI_Type_contiguous(6, MPI_INT, &MPI_SIGNAL);
+    MPI_Type_contiguous(7, MPI_INT, &MPI_SIGNAL);
     MPI_Type_commit(&MPI_SIGNAL);
 
     struct signal {
