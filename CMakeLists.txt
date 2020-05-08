@@ -29,14 +29,14 @@ add_compile_options("${COMMON_FLAGS}")
 #   SHARED -> .so
 add_library(area STATIC area.cpp area.h particle.h Timer.cpp Timer.h)
 
-add_executable(serial serial.cpp area.h particle.h Timer.cpp Timer.h)
+add_executable(serial serial.cpp area.h particle.cpp particle.h Timer.cpp Timer.h)
 
 find_package(MPI REQUIRED)
 
 include_directories(${MPI_INCLUDE_PATH})
 
 # Make target serial
-add_executable(mpi mpi.cpp area.h particle.h Timer.cpp Timer.h)
+add_executable(mpi mpi.cpp area.h particle.cpp particle.h Timer.cpp Timer.h)
 
 target_link_libraries(mpi common ${MPI_LIBRARIES})
 if(MPI_COMPILE_FLAGS)

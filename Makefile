@@ -8,7 +8,7 @@ TARGETS = mpi
 mpi: mpi.o area.o particle.o Timer.o
 	$(MPCC) -o $@ $(LIBS) $(MPILIBS) mpi.o area.o particle.o Timer.o
 
-mpi.o: mpi.cpp area.h particle.h Timer.h 
+mpi.o: mpi.cpp area.cpp particle.cpp Timer.cpp
 	$(MPCC) -c $(CFLAGS) mpi.cpp
 
 clean:

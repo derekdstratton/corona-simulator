@@ -26,9 +26,8 @@ enum states {
     Deceased
 };
 
-long var = 0;
-
 class particle {
+    static long var;
     public:
     static int cnt;
     states state;

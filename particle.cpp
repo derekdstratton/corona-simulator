@@ -3,3 +3,5 @@
 //
 
 #include "particle.h"
+
+long particle::var = 0;
