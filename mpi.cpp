@@ -189,8 +189,8 @@ int main(int argc, char ** argv) {
             {
                 for (int r2 = 0; r2 < NUM_BOXES; r2++) {
                     int size = mpiSignal.size();
-                    MPI_Send(&size, 1, MPI_INT, r2, MPI_ANY_TAG, MPI_COMM_WORLD);
-                    MPI_Send(&mpiSignal[0], size, MPI_SIGNAL, r2, MPI_ANY_TAG, MPI_COMM_WORLD);
+                    MPI_Send(&size, 1, MPI_INT, r2, 1, MPI_COMM_WORLD);
+                    MPI_Send(&mpiSignal[0], size, MPI_SIGNAL, r2, 1, MPI_COMM_WORLD);
                 }
 
             }
