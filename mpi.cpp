@@ -160,7 +160,7 @@ int main(int argc, char ** argv) {
 
                     auto tup = make_tuple(i, j, 1, get<0>(part.second), part.first.id, get<1>(part.second),
                             get<2>(part.second) == Personal ? 1 : 2);
-                    signal stru;
+                    signal stru{};
                     stru.a = i;
                     stru.b = j;
                     stru.c = 2;
@@ -189,7 +189,7 @@ int main(int argc, char ** argv) {
                 {
                     auto tup = make_tuple(i, j, 2, part.first.id, get<0>(part.second), get<1>(part.second),
                                           get<2>(part.second) == Personal ? 1 : 2);
-                    signal stru;
+                    signal stru{};
                     stru.a = i;
                     stru.b = j;
                     stru.c = 2;
