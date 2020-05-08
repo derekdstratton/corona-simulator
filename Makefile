@@ -1,14 +1,14 @@
 CC = g++
 MPCC = mpicxx
 OPENMP = -fopenmp
-CFLAGS = -O3
+CFLAGS = -O3 -std=c++11
 
 TARGETS = mpi
 
-mpi: mpi.o common.o
-	$(MPCC) -o $@ $(LIBS) $(MPILIBS) mpi.o common.o
+mpi: mpi.o area.h particle.h Timer.h
+	$(MPCC) -o $@ $(LIBS) $(MPILIBS) area.h particle.h Timer.h
 
-mpi.o: mpi.cpp common.h
+mpi.o: mpi.cpp area.h particle.h Timer.h 
 	$(MPCC) -c $(CFLAGS) mpi.cpp
 
 clean:
