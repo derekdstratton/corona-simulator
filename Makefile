@@ -5,8 +5,8 @@ CFLAGS = -O3 -std=c++11
 
 TARGETS = mpi
 
-mpi: mpi.o area.h particle.h Timer.h
-	$(MPCC) -o $@ $(LIBS) $(MPILIBS) area.h particle.h Timer.h
+mpi: mpi.o area.o particle.o Timer.o
+	$(MPCC) -o $@ $(LIBS) $(MPILIBS) area.o particle.o Timer.o
 
 mpi.o: mpi.cpp area.h particle.h Timer.h 
 	$(MPCC) -c $(CFLAGS) mpi.cpp

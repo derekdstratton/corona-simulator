@@ -36,7 +36,7 @@ find_package(MPI REQUIRED)
 include_directories(${MPI_INCLUDE_PATH})
 
 # Make target serial
-add_executable(mpi mpi.cpp area.h particle.h)
+add_executable(mpi mpi.cpp area.h particle.h Timer.cpp Timer.h)
 
 target_link_libraries(mpi common ${MPI_LIBRARIES})
 if(MPI_COMPILE_FLAGS)

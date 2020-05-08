@@ -5,8 +5,6 @@
 #ifndef CORONA_AREA_H
 #define CORONA_AREA_H
 
-enum AreaTypes {Public, Personal};
-
 #include <vector>
 #include "particle.h"
 

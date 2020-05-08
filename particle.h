@@ -16,7 +16,7 @@ extern float PROBABILITY_OF_JUMPING;
 extern int t;
 
 using namespace std;
-
+enum AreaTypes {Public, Personal};
 enum states {
     Susceptible,
     Infected,
