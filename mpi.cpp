@@ -201,6 +201,7 @@ int main(int argc, char ** argv) {
                 }
             }
 //        }
+cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
 
         //todo: send mpiSignals to everyone else
         for (int r = 0; r < NUM_BOXES; r++)
@@ -237,15 +238,15 @@ int main(int argc, char ** argv) {
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
                 {
-                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
-                    stru.e << ", " << stru.f << ", " << stru.g << endl;
+//                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
+//                    stru.e << ", " << stru.f << ", " << stru.g << endl;
                     tuple<int, int, int, int, int, int, int> sig = make_tuple(stru.a, stru.b, stru.c,
                     stru.d, stru.e, stru.f, stru.g);
                     if (get<2>(sig) == 2) { //public
+                        cout << "ok" << endl;
                         auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
-                            cout << "ok" << endl;
                             if (part.id == get<3>(sig))
                             {
                                 cout << "boomer" << endl;
@@ -254,10 +255,10 @@ int main(int argc, char ** argv) {
                             }
                         }
                     } else {
+                        cout << "pasta" << endl;
                         auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
-                            cout << "pasta" << endl;
                             if (part.id == get<3>(sig))
                             {
                                 cout << "roni" <<endl;
@@ -272,6 +273,8 @@ int main(int argc, char ** argv) {
         }
         cout << "MPI sigs done sending" << endl;
         mpiSignal.clear();
+
+        cout << "OUTGONG PARTS: " << outgoingParticles.size() << endl;
 
         //send outgoing particles where they need to go
         for (const auto& part : outgoingParticles)
