@@ -309,25 +309,25 @@ int main(int argc, char ** argv) {
              totalRec << ", Deceased- " << totalDec << endl;
 
         //End the simulation because no one was infected
-        if(totalInf > 1 and ! othersHaveBeenInfected)
-            othersHaveBeenInfected = true;
-        else if(totalInf == 0 and !othersHaveBeenInfected)
-        {
-            cout << "A pandemic did not occur! No one else was infected. Ending simulation..." << std::endl;
-            std::chrono::seconds dura( 2);
-            std::this_thread::sleep_for( dura );
-            main(argc, argv);
-            return -2;
-        }
+//        if(totalInf > 1 and ! othersHaveBeenInfected)
+//            othersHaveBeenInfected = true;
+//        else if(totalInf == 0 and !othersHaveBeenInfected)
+//        {
+//            cout << "A pandemic did not occur! No one else was infected. Ending simulation..." << std::endl;
+//            std::chrono::seconds dura( 2);
+//            std::this_thread::sleep_for( dura );
+//            main(argc, argv);
+//            return -2;
+//        }
     }
     std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
-    fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
-    for(auto point: data)
-    {
-//			cout << "Time " << get<0>(point) << ": Susceptible- " << get<1>(point) << ", Infected- " << get<2>(point) << ", Recovered- " << get<3>(point) << ", Deceased- " << get<4>(point) << endl;
-        fout << get<0>(point) << ", " << get<1>(point) << ", " << get<2>(point) << ", " << get<3>(point) << ", " << get<4>(point) << std::endl;
-    }
-    fout.close();
+//    fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
+//    for(auto point: data)
+//    {
+////			cout << "Time " << get<0>(point) << ": Susceptible- " << get<1>(point) << ", Infected- " << get<2>(point) << ", Recovered- " << get<3>(point) << ", Deceased- " << get<4>(point) << endl;
+//        fout << get<0>(point) << ", " << get<1>(point) << ", " << get<2>(point) << ", " << get<3>(point) << ", " << get<4>(point) << std::endl;
+//    }
+//    fout.close();
 
     return 0;
 }
