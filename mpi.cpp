@@ -238,15 +238,16 @@ cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
                 {
-//                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
-//                    stru.e << ", " << stru.f << ", " << stru.g << endl;
+                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
+                    stru.e << ", " << stru.f << ", " << stru.g << endl;
                     tuple<int, int, int, int, int, int, int> sig = make_tuple(stru.a, stru.b, stru.c,
                     stru.d, stru.e, stru.f, stru.g);
                     if (get<2>(sig) == 2) { //public
-                        cout << "ok" << endl;
+//                        cout << "ok" << endl;
                         auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
+                            cout << part.id << endl;
                             if (part.id == get<3>(sig))
                             {
                                 cout << "boomer" << endl;
@@ -255,10 +256,11 @@ cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
                             }
                         }
                     } else {
-                        cout << "pasta" << endl;
+//                        cout << "pasta" << endl;
                         auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
+                            cout << part.id << endl;
                             if (part.id == get<3>(sig))
                             {
                                 cout << "roni" <<endl;
