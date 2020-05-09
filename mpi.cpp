@@ -54,7 +54,7 @@ int main(int argc, char ** argv) {
     MPI_Type_commit(&MPI_SIGNAL);
 
     //initialize stuff, parameters are ALL_CAPS
-    NUMBER_OF_PARTICLES = 1000;
+    NUMBER_OF_PARTICLES = 10000;
     bool othersHaveBeenInfected = false;
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
@@ -201,7 +201,7 @@ int main(int argc, char ** argv) {
                 }
             }
 //        }
-cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
+//cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
 
         //todo: send mpiSignals to everyone else
         for (int r = 0; r < NUM_BOXES; r++)
@@ -281,10 +281,10 @@ cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
                 incomingSignal.clear();
             }
         }
-        cout << "MPI sigs done sending" << endl;
+//        cout << "MPI sigs done sending" << endl;
         mpiSignal.clear();
 
-        cout << "OUTGONG PARTS: " << outgoingParticles.size() << endl;
+//        cout << "OUTGONG PARTS: " << outgoingParticles.size() << endl;
 
         //send outgoing particles where they need to go
         for (const auto& part : outgoingParticles)
