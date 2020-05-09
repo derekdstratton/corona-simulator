@@ -163,7 +163,7 @@ int main(int argc, char ** argv) {
                     signal stru{};
                     stru.a = i;
                     stru.b = j;
-                    stru.c = 2;
+                    stru.c = 1;
                     stru.d = part.first.id;
                     stru.e = get<0>(part.second);
                     stru.f = get<1>(part.second);
@@ -209,13 +209,13 @@ int main(int argc, char ** argv) {
             {
                 for (int r2 = 0; r2 < NUM_BOXES; r2++) {
                     int size = mpiSignal.size();
-                    cout << "1- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                    cout << "1- t: " << t << ", rank: " << r << ", size: " << size << endl;
                     MPI_Send(&size, 1, MPI_INT, r2, 1, MPI_COMM_WORLD);
-                    cout << "2- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                    cout << "2- t: " << t << ", rank: " << r << ", size: " << size << endl;
                     if (size > 0) {
-                        cout << "3- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                        cout << "3- t: " << t << ", rank: " << r << ", size: " << size << endl;
                         MPI_Send(&mpiSignal[0], size, MPI_SIGNAL, r2, 1, MPI_COMM_WORLD);
-                        cout << "4- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                        cout << "4- t: " << t << ", rank: " << r << ", size: " << size << endl;
                     }
                 }
 
@@ -223,15 +223,15 @@ int main(int argc, char ** argv) {
 //            else //this should be fine as long as sending to self is fine.
             {
                 int size;
-                cout << "5- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                cout << "5- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
-                cout << "6- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                cout << "6- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 vector<signal> incomingSignal;
                 incomingSignal.resize(size);
                 if (size > 0) {
-                    cout << "7- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                    cout << "7- t: " << t << ", rank: " << r << ", size: " << size << endl;
                     MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
-                    cout << "8- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                    cout << "8- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 }
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
@@ -279,6 +279,8 @@ int main(int argc, char ** argv) {
             }
         }
         outgoingParticles.clear();
+
+        //todo: send data back to rank 0 to process
 
         data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
 
