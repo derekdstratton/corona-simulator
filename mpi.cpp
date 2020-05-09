@@ -43,12 +43,22 @@ int main(int argc, char ** argv) {
     Timer timer(true);
     srand(time(nullptr));
 
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &NUM_BOXES);
+
+    int RANK;
+    MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
+
+    MPI_Datatype MPI_SIGNAL;
+    MPI_Type_contiguous(7, MPI_INT, &MPI_SIGNAL);
+    MPI_Type_commit(&MPI_SIGNAL);
+
     //initialize stuff, parameters are ALL_CAPS
     NUMBER_OF_PARTICLES = 1000;
     bool othersHaveBeenInfected = false;
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
-    NUM_BOXES = 10;
+//    NUM_BOXES = 10;
     PROBABILITY_OF_JUMPING = 20;
     PROBABILITY_OF_INFECTION = 80;
     RADIUS_OF_INFECTION_SQUARED = 100;
@@ -111,16 +121,6 @@ int main(int argc, char ** argv) {
             personal_areas[i][j].particles.push_back(particles_temp[k++]);
         }
     }
-
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &NUM_BOXES);
-
-    int RANK;
-    MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
-
-    MPI_Datatype MPI_SIGNAL;
-    MPI_Type_contiguous(7, MPI_INT, &MPI_SIGNAL);
-    MPI_Type_commit(&MPI_SIGNAL);
 
     struct signal {
         int a, b, c, d, e, f, g;
@@ -237,6 +237,8 @@ int main(int argc, char ** argv) {
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
                 {
+                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
+                    stru.e << ", " << stru.f << ", " << stru.g << endl;
                     tuple<int, int, int, int, int, int, int> sig = make_tuple(stru.a, stru.b, stru.c,
                     stru.d, stru.e, stru.f, stru.g);
                     if (get<2>(sig) == 2) { //public
