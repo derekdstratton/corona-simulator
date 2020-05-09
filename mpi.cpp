@@ -238,34 +238,41 @@ cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
                 //todo: move this outside for loop for efficiency?
                 for (auto stru : incomingSignal)
                 {
-                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
-                    stru.e << ", " << stru.f << ", " << stru.g << endl;
+//                    cout << "signal: " << stru.a << ", " << stru.b << ", " << stru.c << ", " << stru.d << ", " <<
+//                    stru.e << ", " << stru.f << ", " << stru.g << endl;
                     tuple<int, int, int, int, int, int, int> sig = make_tuple(stru.a, stru.b, stru.c,
                     stru.d, stru.e, stru.f, stru.g);
                     if (get<2>(sig) == 2) { //public
 //                        cout << "ok" << endl;
-                        auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
-                        for (const auto& part : parts)
+//                        auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
+                        for (auto it = public_areas[get<0>(sig)][get<1>(sig)].particles.begin();
+                            it != public_areas[get<0>(sig)][get<1>(sig)].particles.end();
+                            it++)
                         {
-                            cout << part.id << endl;
-                            if (part.id == get<3>(sig))
+//                            cout << part.id << endl;
+                            if (it->id == get<3>(sig))
                             {
-                                cout << "boomer" << endl;
-                                outgoingParticles.insert(make_pair(part,
+//                                cout << "boomer" << endl;
+                                outgoingParticles.insert(make_pair(*it,
                                         make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
+                                public_areas[get<0>(sig)][get<1>(sig)].particles.erase(it);
+                                it--;
                             }
                         }
                     } else {
 //                        cout << "pasta" << endl;
-                        auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
-                        for (const auto& part : parts)
-                        {
-                            cout << part.id << endl;
-                            if (part.id == get<3>(sig))
+//                        auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
+                        for (auto it = personal_areas[get<0>(sig)][get<1>(sig)].particles.begin();
+                             it != personal_areas[get<0>(sig)][get<1>(sig)].particles.end();
+                             it++)
+//                            cout << part.id << endl;
+                            if (it->id == get<3>(sig))
                             {
-                                cout << "roni" <<endl;
-                                outgoingParticles.insert(make_pair(part,
+//                                cout << "roni" <<endl;
+                                outgoingParticles.insert(make_pair(*it,
                                                                    make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
+                                personal_areas[get<0>(sig)][get<1>(sig)].particles.erase(it);
+                                it--;
                             }
                         }
                     }
