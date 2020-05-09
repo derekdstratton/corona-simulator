@@ -220,17 +220,18 @@ int main(int argc, char ** argv) {
                 }
 
             }
+            MPI_Status status;
 //            else //this should be fine as long as sending to self is fine.
             {
                 int size;
 //                cout << "5- t: " << t << ", rank: " << r << ", size: " << size << endl;
-                MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
+                MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 //                cout << "6- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 vector<signal> incomingSignal;
                 incomingSignal.resize(size);
                 if (size > 0) {
 //                    cout << "7- t: " << t << ", rank: " << r << ", size: " << size << endl;
-                    MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, nullptr);
+                    MPI_Recv(&incomingSignal[0], size, MPI_SIGNAL, r, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 //                    cout << "8- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 }
                 //todo: move this outside for loop for efficiency?
@@ -242,8 +243,10 @@ int main(int argc, char ** argv) {
                         auto parts = public_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
+                            cout << "ok" << endl;
                             if (part.id == get<3>(sig))
                             {
+                                cout << "boomer" << endl;
                                 outgoingParticles.insert(make_pair(part,
                                         make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
                             }
@@ -252,8 +255,10 @@ int main(int argc, char ** argv) {
                         auto parts = personal_areas[get<0>(sig)][get<1>(sig)].particles;
                         for (const auto& part : parts)
                         {
+                            cout << "pasta" << endl;
                             if (part.id == get<3>(sig))
                             {
+                                cout << "roni" <<endl;
                                 outgoingParticles.insert(make_pair(part,
                                                                    make_tuple(get<4>(sig), get<5>(sig), get<6>(sig) == 1 ? Personal : Public)));
                             }
