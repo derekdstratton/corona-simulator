@@ -265,6 +265,7 @@ cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
                         for (auto it = personal_areas[get<0>(sig)][get<1>(sig)].particles.begin();
                              it != personal_areas[get<0>(sig)][get<1>(sig)].particles.end();
                              it++)
+                        {
 //                            cout << part.id << endl;
                             if (it->id == get<3>(sig))
                             {
