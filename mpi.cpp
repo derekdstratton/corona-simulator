@@ -17,8 +17,7 @@
 using namespace std;
 
 //NOTE: SINCE THE SIM STARTS WITH 1 INFECTED INDIVIDUAL, THEY MIGHT DIE OR RECOVER BEFORE THEY INFECT
-//ANYONE ELSE. THEY NEED TO EITHER HEAL SLOWER OR SPREAD IT FASTER!
-
+//ANYONE ELSE. THEY NEED TO EITHER HEAL SLOWER OR SPREAD IT FASTER
 //GLOBAL PARAMETERS
 float RADIUS_OF_INFECTION_SQUARED; //How close particles are to be infected. Square space is x, y {0:100}
 //so theoretically values should go from 0 to 100^2
@@ -33,6 +32,11 @@ float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
 int t; //time variable is global so it can be an extern
 
 int main(int argc, char ** argv) {
+cout << omp_get_max_threads() << endl;
+#pragma omp parallel 
+{
+	cout << omp_get_thread_num() << endl;
+}
     std::ofstream fout("serialData.csv");
     if(fout.fail())
     {
@@ -54,7 +58,7 @@ int main(int argc, char ** argv) {
     MPI_Type_commit(&MPI_SIGNAL);
 
     //initialize stuff, parameters are ALL_CAPS
-    NUMBER_OF_PARTICLES = 10000;
+    NUMBER_OF_PARTICLES = 100000;
     bool othersHaveBeenInfected = false;
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
