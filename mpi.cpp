@@ -305,7 +305,7 @@ int main(int argc, char ** argv) {
         data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
 
         //Debugging
-        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
+        cout << "Rank: " << RANK << " Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
              totalRec << ", Deceased- " << totalDec << endl;
 
         //End the simulation because no one was infected
