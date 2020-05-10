@@ -10,7 +10,7 @@
 #include <chrono>
 #include <thread>
 #include <mpi.h>
-
+#include "omp.h"
 #include "area.h"
 #include "Timer.h"
 
@@ -146,6 +146,7 @@ int main(int argc, char ** argv) {
         int i = RANK;
 //        for (int i = 0; i < NUM_BOXES; i++)
 //        {
+#pragma omp for
             for (int j = 0; j < personal_areas[i].size(); j++)
             {
                 personal_areas[i][j].processArea();
@@ -176,6 +177,7 @@ int main(int argc, char ** argv) {
 //        //process public areas
 //        for (int i = 0; i < NUM_BOXES; i++)
 //        {
+#pragma omp for
             for (int j = 0; j < public_areas[i].size(); j++)
             {
                 public_areas[i][j].processArea();
