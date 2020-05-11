@@ -320,8 +320,8 @@ cout << omp_get_max_threads() << endl;
         data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
 
         //Debugging
-        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
-             totalRec << ", Deceased- " << totalDec << endl;
+//        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
+//             totalRec << ", Deceased- " << totalDec << endl;
 
         //End the simulation because no one was infected
 //        if(totalInf > 1 and ! othersHaveBeenInfected)
