@@ -37,13 +37,13 @@ cout << omp_get_max_threads() << endl;
 {
 	cout << omp_get_thread_num() << endl;
 }
-    std::ofstream fout("serialData.csv");
-    if(fout.fail())
-    {
-        std::cerr << "Could not open data file! Please close serialData.csv and try again" << std::endl;
-        return -1;
-    }
-    std::cout << "Starting simulation" << std::endl;
+//    std::ofstream fout("serialData.csv");
+//    if(fout.fail())
+//    {
+//        std::cerr << "Could not open data file! Please close serialData.csv and try again" << std::endl;
+//        return -1;
+//    }
+//    std::cout << "Starting simulation" << std::endl;
     Timer timer(true);
     srand(time(nullptr));
 
@@ -134,7 +134,7 @@ cout << omp_get_max_threads() << endl;
 
     //main loop
     map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
-    vector<tuple<int, int, int, int, int>> data;
+//    vector<tuple<int, int, int, int, int>> data;
     for (t = 0; t < 1000; t++)
     {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
@@ -308,11 +308,11 @@ cout << omp_get_max_threads() << endl;
 
         //todo: send data back to rank 0 to process
 
-        data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
+//        data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
 
         //Debugging
-        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
-             totalRec << ", Deceased- " << totalDec << endl;
+//        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
+//             totalRec << ", Deceased- " << totalDec << endl;
 
         //End the simulation because no one was infected
 //        if(totalInf > 1 and ! othersHaveBeenInfected)
