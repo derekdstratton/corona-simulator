@@ -32,11 +32,11 @@ float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
 int t; //time variable is global so it can be an extern
 
 int main(int argc, char ** argv) {
-//cout << omp_get_max_threads() << endl;
-//#pragma omp parallel
-//{
-//	cout << omp_get_thread_num() << endl;
-//}
+cout << omp_get_max_threads() << endl;
+#pragma omp parallel
+{
+	cout << omp_get_thread_num() << endl;
+}
 //    std::ofstream fout("serialData.csv");
 //    if(fout.fail())
 //    {
