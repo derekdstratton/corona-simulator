@@ -4,7 +4,7 @@
 
 #ifndef CORONA_PARTICLE_H
 #define CORONA_PARTICLE_H
-
+#include "omp.h"
 #include <map>
 #include <utility>
 #include <cmath>
@@ -56,14 +56,15 @@ class particle {
     //processes the particle at each time step
     void process(const vector<particle>& particlesInArea)
     {
+	unsigned int thread = omp_get_thread_num();
         //first move position.
-        x += (rand() % 6) - 3.0;
+        x += (rand_r(&thread) % 6) - 3.0;
         if (x < 0) {
             x = 0;
         } else if (x >= 100) {
             x = 100;
         }
-        y += (rand() % 6) - 3.0;
+        y += (rand_r(&thread) % 6) - 3.0;
         if (y < 0) {
             y = 0;
         } else if (y >= 100) {
@@ -82,7 +83,7 @@ class particle {
                     //transmitting the disease
                     if (nearby.state == Infected &&
                     dist_squared(nearby) <= RADIUS_OF_INFECTION_SQUARED &&
-                    rand() % 100 < PROBABILITY_OF_INFECTION) {
+                    rand_r(&thread) % 100 < PROBABILITY_OF_INFECTION) {
                         state = Infected;
                         toi = t;
                         break;
@@ -93,9 +94,9 @@ class particle {
             case Infected:
             {
                 //probability of transitioning to recovered or deceased
-                if (rand() % 10000 < PROBABILITY_OF_CURE + (t - toi)) {
+                if (rand_r(&thread) % 10000 < PROBABILITY_OF_CURE + (t - toi)) {
                     state = Recovered;
-                } else if (rand() % 10000 < PROBABILITY_OF_DEATH + (t - toi)) {
+                } else if (rand_r(&thread) % 10000 < PROBABILITY_OF_DEATH + (t - toi)) {
                     state = Deceased;
                 }
                 break;
@@ -113,7 +114,7 @@ class particle {
         //finally, check to see if jumping
         for (auto item : jumpLocationsAndChance)
         {
-            if (PROBABILITY_OF_JUMPING >= rand() % 100)
+            if (PROBABILITY_OF_JUMPING >= rand_r(&thread) % 100)
             {
                 jumping = true;
                 jumpLocation = item.first;

@@ -150,14 +150,16 @@ cout << omp_get_max_threads() << endl;
         int i = RANK;
 //        for (int i = 0; i < NUM_BOXES; i++)
 //        {
-#pragma omp for
+#pragma omp parallel for shared(mpiSignal)
             for (int j = 0; j < personal_areas[i].size(); j++)
             {
+//cout << omp_get_thread_num() << endl;
                 personal_areas[i][j].processArea();
-                totalSus += personal_areas[i][j].numSus;
+                /*totalSus += personal_areas[i][j].numSus;
                 totalInf += personal_areas[i][j].numInf;
                 totalRec += personal_areas[i][j].numRec;
-                totalDec += personal_areas[i][j].numDec;
+                totalDec += personal_areas[i][j].numDec;*/
+//cout << "good" << endl;
 //                outgoingParticles.insert(personal_areas[i][j].outgoingParticles.begin(),
 //                                         personal_areas[i][j].outgoingParticles.end());
                 for (auto part : personal_areas[i][j].outgoingParticles)
@@ -173,7 +175,10 @@ cout << omp_get_max_threads() << endl;
                     stru.e = get<0>(part.second);
                     stru.f = get<1>(part.second);
                     stru.g = get<2>(part.second) == Personal ? 1 : 2;
+#pragma omp critical
+{
                     mpiSignal.push_back(stru);
+}
                 }
             }
 //        }
@@ -181,14 +186,14 @@ cout << omp_get_max_threads() << endl;
 //        //process public areas
 //        for (int i = 0; i < NUM_BOXES; i++)
 //        {
-#pragma omp for
+#pragma omp parallel for shared(mpiSignal)
             for (int j = 0; j < public_areas[i].size(); j++)
             {
                 public_areas[i][j].processArea();
-                totalSus += public_areas[i][j].numSus;
+/*                totalSus += public_areas[i][j].numSus;
                 totalInf += public_areas[i][j].numInf;
                 totalRec += public_areas[i][j].numRec;
-                totalDec += public_areas[i][j].numDec;
+                totalDec += public_areas[i][j].numDec;*/
 //                outgoingParticles.insert(public_areas[i][j].outgoingParticles.begin(),
 //                                         public_areas[i][j].outgoingParticles.end());
                 for (auto part : public_areas[i][j].outgoingParticles)
@@ -203,13 +208,17 @@ cout << omp_get_max_threads() << endl;
                     stru.e = get<0>(part.second);
                     stru.f = get<1>(part.second);
                     stru.g = get<2>(part.second) == Personal ? 1 : 2;
+#pragma omp critical
+{
                     mpiSignal.push_back(stru);
+}
                 }
             }
 //        }
 //cout << "MPI SIGNALS: " << mpiSignal.size() << endl;
 
         //todo: send mpiSignals to everyone else
+        //#pragma omp parallel for
         for (int r = 0; r < NUM_BOXES; r++)
         {
             if (RANK == r)
