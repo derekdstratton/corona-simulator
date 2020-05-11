@@ -326,7 +326,12 @@ int main(int argc, char ** argv) {
 //            return -2;
 //        }
     }
-    std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
+
+	MPI_Barrier( MPI_COMM_WORLD );
+	if(RANK == 0 )
+    	std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
+
+	MPI_Finalize();
 //    fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
 //    for(auto point: data)
 //    {
