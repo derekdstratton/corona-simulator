@@ -27,7 +27,7 @@ int NUM_BOXES; //number of boxes to run things on.
 float PROBABILITY_OF_JUMPING; // Should be a float between 0 and 100
 float PROBABILITY_OF_CURE; //Should be a float between 0 and 100000
 float PROBABILITY_OF_DEATH; //should be a float between 0 and 100000
-
+bool serial = false;
 
 int t; //time variable is global so it can be an extern
 

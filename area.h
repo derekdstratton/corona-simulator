@@ -9,6 +9,8 @@
 
 using namespace std;
 
+extern bool serial;
+
 class area {
     public:
     vector<particle> particles;
@@ -49,9 +51,10 @@ class area {
             }
             if (it->jumping) {
                 outgoingParticles.insert(pair<particle, tuple<int, int, AreaTypes>>(*it, it->jumpLocation));
-                particles.erase(it);
-                it--;
-//TODO: REMOVING FOR MPI, THIS BREAKS SERIAL BUT LOL RIP
+                if (serial) {
+                    particles.erase(it);
+                    it--;
+                }
             }
         }
     }
