@@ -113,7 +113,7 @@ class particle {
         //finally, check to see if jumping
         for (auto item : jumpLocationsAndChance)
         {
-            if (PROBABILITY_OF_JUMPING >= rand() % 100)
+            if (PROBABILITY_OF_JUMPING > rand() % 1000)
             {
                 jumping = true;
                 jumpLocation = item.first;
