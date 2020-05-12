@@ -93,9 +93,9 @@ class particle {
             case Infected:
             {
                 //probability of transitioning to recovered or deceased
-                if (rand() % 10000 < PROBABILITY_OF_CURE + (t - toi)) {
+                if (rand() % 100000 < PROBABILITY_OF_CURE + (t - toi)) {
                     state = Recovered;
-                } else if (rand() % 10000 < PROBABILITY_OF_DEATH + (t - toi)) {
+                } else if (rand() % 1000000 < PROBABILITY_OF_DEATH + (t - toi)) {
                     state = Deceased;
                 }
                 break;

@@ -51,8 +51,8 @@ int main(int argc, char ** argv) {
     PROBABILITY_OF_JUMPING = 20;
     PROBABILITY_OF_INFECTION = 80;
     RADIUS_OF_INFECTION_SQUARED = 100;
-    PROBABILITY_OF_CURE = 2;
-    PROBABILITY_OF_DEATH = 1;
+    PROBABILITY_OF_CURE = 100;
+    PROBABILITY_OF_DEATH = 2;
     int NUM_LOCATIONS_PEOPLE_VISIT = 10;
 
     //create initial particles before assigning them to their areas

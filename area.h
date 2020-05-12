@@ -49,8 +49,8 @@ class area {
             }
             if (it->jumping) {
                 outgoingParticles.insert(pair<particle, tuple<int, int, AreaTypes>>(*it, it->jumpLocation));
-//                particles.erase(it);
-//                it--;
+                particles.erase(it);
+                it--;
 //TODO: REMOVING FOR MPI, THIS BREAKS SERIAL BUT LOL RIP
             }
         }
