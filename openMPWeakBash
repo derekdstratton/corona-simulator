@@ -1,0 +1,21 @@
+#!/bin/bash
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi
+export OMP_NUM_THREADS=1
+mpirun -n 1 ./mpi

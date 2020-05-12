@@ -48,11 +48,11 @@ int main(int argc, char ** argv) {
     int personal_area_cnt = NUMBER_OF_PARTICLES / 2;
     int public_area_cnt = personal_area_cnt / 4;
     NUM_BOXES = 10;
-    PROBABILITY_OF_JUMPING = 20;
+    PROBABILITY_OF_JUMPING = 200;
     PROBABILITY_OF_INFECTION = 80;
     RADIUS_OF_INFECTION_SQUARED = 100;
-    PROBABILITY_OF_CURE = 2;
-    PROBABILITY_OF_DEATH = 1;
+    PROBABILITY_OF_CURE = 100;
+    PROBABILITY_OF_DEATH = 2;
     int NUM_LOCATIONS_PEOPLE_VISIT = 10;
 
     //create initial particles before assigning them to their areas
@@ -119,10 +119,25 @@ int main(int argc, char ** argv) {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
 
         //this will implement a lockdown mode
-        if (t == 10)
+        if (t == 100)
         {
             PROBABILITY_OF_JUMPING = 1;
             //todo: people should also be sent back to their personal areas. ugh im lazy tho
+            //if you're in a public area, go home.
+            for (int i = 0; i < NUM_BOXES; i++)
+            {
+                for (int j = 0; j < public_areas[i].size(); j++)
+                {
+                    for (auto it = public_areas[i][j].particles.begin(); it != public_areas[i][j].particles.end();) {
+                        for (auto x : it->jumpLocationsAndChance) {
+                            if (get<2>(x.first) == Personal) {
+                                personal_areas[get<0>(x.first)][get<1>(x.first)].particles.push_back(*it);
+                                public_areas[i][j].particles.erase(it);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         //process personal areas
@@ -145,6 +160,7 @@ int main(int argc, char ** argv) {
         {
             for (int j = 0; j < public_areas[i].size(); j++)
             {
+//                cout << public_areas[i][j].particles.size() << endl;
                 public_areas[i][j].processArea();
                 totalSus += public_areas[i][j].numSus;
                 totalInf += public_areas[i][j].numInf;
