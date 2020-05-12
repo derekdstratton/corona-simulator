@@ -37,12 +37,12 @@ cout << omp_get_max_threads() << endl;
 {
 	cout << omp_get_thread_num() << endl;
 }
-    std::ofstream fout("serialData.csv");
-    if(fout.fail())
-    {
-        std::cerr << "Could not open data file! Please close serialData.csv and try again" << std::endl;
-        return -1;
-    }
+//    std::ofstream fout("serialData.csv");
+//    if(fout.fail())
+//    {
+//        std::cerr << "Could not open data file! Please close serialData.csv and try again" << std::endl;
+//        return -1;
+//    }
     std::cout << "Starting simulation" << std::endl;
     Timer timer(true);
     srand(time(nullptr));
@@ -134,7 +134,7 @@ cout << omp_get_max_threads() << endl;
 
     //main loop
     map<particle, tuple<int, int, AreaTypes>> outgoingParticles;
-    vector<tuple<int, int, int, int, int>> data;
+//    vector<tuple<int, int, int, int, int>> data;
     for (t = 0; t < 1000; t++)
     {
         int totalSus = 0, totalInf = 0, totalRec = 0, totalDec = 0;
@@ -243,6 +243,7 @@ cout << omp_get_max_threads() << endl;
 //                cout << "5- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 MPI_Recv(&size, 1, MPI_INT, r, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 //                cout << "6- t: " << t << ", rank: " << r << ", size: " << size << endl;
+//                cout << "6- t: " << t << ", rank: " << r << ", size: " << size << endl;
                 vector<signal> incomingSignal;
                 incomingSignal.resize(size);
                 if (size > 0) {
@@ -317,7 +318,7 @@ cout << omp_get_max_threads() << endl;
 
         //todo: send data back to rank 0 to process
 
-        data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
+//        data.emplace_back(t, totalSus, totalInf, totalRec, totalDec);
 
         //Debugging
 //        cout << "Time " << t << ": Susceptible- " << totalSus << ", Infected- " << totalInf << ", Recovered- " <<
@@ -335,7 +336,10 @@ cout << omp_get_max_threads() << endl;
 //            return -2;
 //        }
     }
-    std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
+
+	MPI_Barrier( MPI_COMM_WORLD );
+	if(RANK == 0)
+    	std::cout << "Elapsed time: " << timer.getElapsedTime() << std::endl;
 //    fout << "Time, Susceptible, Infected, Recovered, Deceased" << std::endl;
 //    for(auto point: data)
 //    {
@@ -344,5 +348,6 @@ cout << omp_get_max_threads() << endl;
 //    }
 //    fout.close();
 
+	MPI_Finalize();
     return 0;
 }
